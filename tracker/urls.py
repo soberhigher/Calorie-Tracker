@@ -1,0 +1,111 @@
+from os import dup
+
+from tracker.views import (
+    index,
+    ProductListView,
+    EaterListView,
+    MealEntryListView,
+    MealEntryCreateView,
+    ProductCreateView,
+    ProductUpdateView,
+    ProductDeleteView,
+    MealEntryUpdateView,
+    MealEntryDeleteView,
+    EaterCreateView,
+    EaterUpdateView,
+    EaterDeleteView,
+    MealListView,
+    MealCreateView,
+    MealUpdateView,
+    MealDeleteView, MealDetailView, duplicate, ProductDetailView, EaterDetailView,
+)
+from django.urls import path
+
+app_name = "tracker"
+urlpatterns = [
+    path(
+        "",
+        index,
+        name="index"),
+    path(
+        "eaters/",
+        EaterListView.as_view(),
+        name="eater-list"),
+    path(
+        "eaters/create/",
+        EaterCreateView.as_view(),
+        name="eater-create"),
+    path(
+        "eaters/update/<int:pk>/",
+        EaterUpdateView.as_view(),
+        name="eater-update"),
+    path(
+        "eaters/delete/<int:pk>/",
+        EaterDeleteView.as_view(),
+        name="eater-delete"),
+    path(
+        "eaters/detail/<int:pk>/",
+        EaterDetailView.as_view(),
+        name="eater-detail"),
+    path(
+        "products/",
+        ProductListView.as_view(),
+        name="product-list"),
+    path(
+        "products-create/",
+        ProductCreateView.as_view(),
+        name="product-create"),
+    path(
+        "products-update/<int:pk>/",
+        ProductUpdateView.as_view(),
+        name="product-update"),
+    path(
+        "products-delete/<int:pk>/",
+        ProductDeleteView.as_view(),
+        name="product-delete"),
+    path(
+        "products-detail/<int:pk>/",
+        ProductDetailView.as_view(),
+        name="product-detail"),
+    path(
+        "meals/",
+        MealListView.as_view(),
+        name="meal-list"),
+    path(
+        "meals-create/",
+        MealCreateView.as_view(),
+        name="meal-create"),
+    path(
+        "meals-update/<int:pk>/",
+        MealUpdateView.as_view(),
+        name="meal-update"),
+    path(
+        "meals-delete/<int:pk>/",
+        MealDeleteView.as_view(),
+        name="meal-delete"),
+    path(
+        "meals-detail/<int:pk>/",
+        MealDetailView.as_view(),
+        name="meal-detail"),
+    path(
+        "meals/<int:pk>/duplicate/",
+        duplicate,
+        name="meal-duplicate"),
+    path(
+        "meals-entry/",
+        MealEntryListView.as_view(),
+        name="meal-entry-list"),
+    path(
+        "meals/<int:pk>/add-entry/",
+        MealEntryCreateView.as_view(),
+        name="meal-entry-form"),
+    path(
+        "meals-entry-update/<int:pk>/",
+        MealEntryUpdateView.as_view(),
+        name="meal-entry-update"),
+    path(
+        "meals-entry-delete/<int:pk>/",
+        MealEntryDeleteView.as_view(),
+        name="meal-entry-delete")
+]
+
