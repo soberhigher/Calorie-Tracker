@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="mb-1">Dashboard</h1>
+    <p class="text-muted mb-0">
+      Welcome back, {{ user.username }}!
+    </p>
+  </div>
+
+  <a href="{% url 'tracker:meal-create' %}" class="btn btn-primary ">
+    + Add meal
+  </a>
+</div>
+
+  <div class="row g-3">
+
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5>Calories</h5>
+          <p class="display-6 mb-3">
+            {{ total.calories|floatformat:"-1" }}
+          </p>
+
+          <div class="d-flex justify-content-between align-items-baseline">
+            <span class="text-muted">Goal: {{ calories_goals }} kcal</span>
+            <span>{{ calories_percent }}%</span>
+          </div>
+
+          <div class="progress mt-2">
+            <div class="progress-bar
+                 {% if calories_percent < 70 %}
+                 bg-success
+                 {% elif calories_percent < 100 %}
+                 bg-warning
+                 {% else %}
+                 bg-danger
+                 {% endif %}"
+                 style="width: {{ calories_percent }}%;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5>Proteins</h5>
+          <p class="display-6 mb-3">
+            {{ total.protein|floatformat:"-1" }}
+          </p>
+
+          <div class="d-flex justify-content-between align-items-baseline">
+            <span class="text-muted">Goal: {{ goals.protein }} g</span>
+            <span>{{ protein_percent }}%</span>
+          </div>
+
+          <div class="progress mt-2">
+            <div class="progress-bar
+                 {% if protein_percent < 70 %}
+                 bg-success
+                 {% elif protein_percent < 100 %}
+                 bg-warning
+                 {% else %}
+                 bg-danger
+                 {% endif %}"
+                 style="width: {{ protein_percent }}%;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5>Fats</h5>
+          <p class="display-6 mb-3">
+            {{ total.fat|floatformat:"-1" }}
+          </p>
+
+          <div class="d-flex justify-content-between align-items-baseline">
+            <span class="text-muted">Goal: {{ goals.fat }} g</span>
+            <span>{{ fat_percent }}%</span>
+          </div>
+
+          <div class="progress mt-2">
+            <div class="progress-bar
+                 {% if fat_percent < 70 %}
+                 bg-success
+                 {% elif fat_percent < 100 %}
+                 bg-warning
+                 {% else %}
+                 bg-danger
+                 {% endif %}"
+                 style="width: {{ fat_percent }}%;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5>Carbs</h5>
+          <p class="display-6 mb-3">
+            {{ total.carb|floatformat:"-1" }}
+          </p>
+
+          <div class="d-flex justify-content-between align-items-baseline">
+            <span class="text-muted">Goal: {{ goals.carb }} g</span>
+            <span>{{ carb_percent }}%</span>
+          </div>
+
+          <div class="progress mt-2">
+            <div class="progress-bar
+                 {% if carb_percent < 70 %}
+                 bg-success
+                 {% elif carb_percent < 100 %}
+                 bg-warning
+                 {% else %}
+                 bg-danger
+                 {% endif %}"
+                 style="width: {{ carb_percent }}%;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock %}

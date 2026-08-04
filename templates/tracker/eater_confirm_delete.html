@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+  <div class="row">
+  <div  class="col-lg-7 ms-lg-3">
+
+<div class="card">
+  <div class="card-body p-4">
+
+    <h2 class="mb-4">Delete Eater?</h2>
+
+    <div class="border rounded p-3 mb-4">
+      <div class="text-muted small">
+        Eater
+      </div>
+
+      <div class="fw-semibold fs-5">
+        {{ eater.username }} - {{ eater.get_lifestyle_display }}
+      </div>
+    </div>
+
+    <p class="alert alert-danger py-2 mb-4">
+      This action cannot be undone.
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <button class="btn btn-outline-danger">
+        Delete
+      </button>
+
+      <a href="{% url 'tracker:product-list' %}"
+         class="btn btn-outline-secondary ms-2">
+        Cancel
+      </a>
+    </form>
+
+  </div>
+</div>
+  </div>
+</div>
+{% endblock %}

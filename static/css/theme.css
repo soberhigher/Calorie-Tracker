@@ -1,0 +1,32 @@
+.btn-outline-primary {
+    color: #7ea4d8;
+    border-color: #5877a8;
+}
+
+.btn-outline-primary:hover {
+    background: #5877a8;
+    border-color: #5877a8;
+    color: #fff;
+}
+
+.btn-outline-success {
+    color: #88c7a2;
+    border-color: #4d8d67;
+}
+
+.btn-outline-success:hover {
+    background: #4d8d67;
+    border-color: #4d8d67;
+    color: #fff;
+}
+
+.btn-outline-danger {
+    color: #d58b8b;
+    border-color: #8d5252;
+}
+
+.btn-outline-danger:hover {
+    background: #8d5252;
+    border-color: #8d5252;
+    color: #fff;
+}

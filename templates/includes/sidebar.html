@@ -1,0 +1,93 @@
+        {% if user.is_authenticated %}
+
+
+
+<nav class="d-flex flex-column vh-100 bg-dark border-end">
+
+    <div class="p-3 border-bottom">
+
+    <a href="{% url 'tracker:index' %}"
+       class="text-decoration-none text-white">
+
+        <h4 class="mb-0">
+            <i class="bi bi-fire"></i>
+            CalorieTracker
+        </h4>
+
+    </a>
+
+</div>
+
+    <div class="p-3">
+
+        {% if user.is_authenticated %}
+
+            <div class="mb-4">
+
+                <div class="text-secondary small">
+                    Signed in as
+                </div>
+
+                <div class="text-white fw-semibold">
+                    {{ user.username }}
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+
+        <ul class="nav nav-pills flex-column">
+
+            <li class="nav-item mb-2">
+                <a href="{% url 'tracker:index' %}" class="nav-link text-white">
+                    <i class="bi bi-house me-2"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
+                <a href="{% url 'tracker:meal-list' %}" class="nav-link text-white">
+                    <i class="bi bi-cup-hot me-2"></i>
+                    Meals
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
+                <a href="{% url 'tracker:product-list' %}" class="nav-link text-white">
+                    <i class="bi bi-basket me-2"></i>
+                    Products
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
+                <a href="{% url 'tracker:eater-list' %}" class="nav-link text-white">
+                    <i class="bi bi-people me-2"></i>
+                    Eaters
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div class="mt-auto p-3 border-top">
+
+        {% if user.is_authenticated %}
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="btn btn-outline-light w-100">
+                    <i class="bi bi-box-arrow-right me-2"></i>
+                    Logout
+                </button>
+            </form>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+{% endif %}

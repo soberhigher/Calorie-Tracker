@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+
+  <div class="d-flex justify-content-between align-items-start mb-3">
+
+    <div>
+      <h1 class="mb-1">{{ meal.get_ration_display }}</h1>
+      <p class="text-muted mb-0">
+        {{ meal.date|date:"d M, H:i" }}
+      </p>
+    </div>
+
+    <a href="{% url 'tracker:meal-entry-form' pk=meal.id %}"
+       class="btn btn-outline-primary">
+      + Add product
+    </a>
+
+  </div>
+
+
+  <div class="card mb-4">
+    <div class="card-body py-2 px-2">
+
+      <div class="row">
+
+        <div class="col text-center py-1">
+          <h4 class="fw-bold mb-1">
+            {{ meal.total_calories|floatformat:"0" }} kcal
+          </h4>
+          <p class="text-muted mb-0">Calories</p>
+        </div>
+
+        <div class="col text-center py-1">
+          <h4 class="fw-bold mb-1">
+            {{ meal.total_protein|floatformat:"0" }} g
+          </h4>
+          <p class="text-muted mb-0">Protein</p>
+        </div>
+
+        <div class="col text-center py-1">
+          <h4 class="fw-bold mb-1">
+            {{ meal.total_fat|floatformat:"0" }} g
+          </h4>
+          <p class="text-muted mb-0">Fat</p>
+        </div>
+
+        <div class="col text-center py-1">
+          <h4 class="fw-bold mb-1">
+            {{ meal.total_carbs|floatformat:"0" }} g
+          </h4>
+          <p class="text-muted mb-0">Carbs</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-hover align-middle">
+
+        <tr>
+          <th>Product</th>
+          <th>Weight</th>
+          <th>Calories</th>
+          <th>Proteins</th>
+          <th>Fats</th>
+          <th>Carbs</th>
+          <th>Actions</th>
+        </tr>
+
+
+        {% for entry in meal.infos.all %}
+          <tr>
+            <td><a href="{% url 'tracker:product-detail' pk=entry.product.id%}" class="text-decoration-none">{{ entry.product }}</a></td>
+            {% if entry.weight %}
+              <td>{{ entry.weight }} g</td>
+            {% else %}
+              <td>{{ entry.quantity }} pc</td>
+            {% endif %}
+
+            <td>{{ entry.actual_calories|floatformat:"0" }} kcal</td>
+            <td>{{ entry.actual_protein|floatformat:"0" }} g</td>
+            <td>{{ entry.actual_fat|floatformat:"0" }} g</td>
+            <td>{{ entry.actual_carb|floatformat:"0" }} g</td>
+            <td>
+              <a href="{% url 'tracker:meal-entry-delete' pk=entry.id %}"
+                 class="btn btn-outline-danger btn-sm flex-fill">Delete</a>
+
+          <a href="{% url 'tracker:meal-entry-update' pk=entry.id %}"
+                 class="btn btn-outline-primary btn-sm flex-fill">Update</a></td>
+          </tr>
+
+        {% endfor %}
+
+
+      </table>
+
+      <p class="text-muted mt-3 mb-0">
+        Showing {{ meal.infos.count }} product{{ meal.infos.count|pluralize }}
+      </p>
+
+    </div>
+
+  </div>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center">
+
+    <h1>Eaters</h1>
+
+    {% include "includes/search_form.html" with search_name="username" search_value=request.GET.username %}
+
+    <a href="{% url 'tracker:eater-create' %}"
+       class="btn btn-primary">
+        + Add Eater
+    </a>
+
+</div>
+
+{% if eater_list %}
+
+<div class="card mt-3">
+
+    <div class="card-body">
+
+        <table class="table align-middle mb-0">
+
+            <thead>
+
+            <tr>
+                <th>Username</th>
+                <th>Age</th>
+                <th>Lifestyle</th>
+                <th>Calories Goal</th>
+                <th class="text-end">Actions</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for eater in eater_list %}
+
+                <tr>
+
+                    <td>
+                            {{ eater.username }}
+
+                    </td>
+
+                    <td>{{ eater.age }}</td>
+
+                    <td>{{ eater.get_lifestyle_display }}</td>
+
+                    <td>{{ eater.daily_needs }} kcal</td>
+
+                    <td class="text-end">
+
+                        <a href="{% url 'tracker:eater-detail' pk=eater.id %}"
+                           class="btn btn-outline-success btn-sm">
+                            Detail
+                        </a>
+
+                        <a href="{% url 'tracker:eater-update' pk=eater.id %}"
+                           class="btn btn-outline-primary btn-sm">
+                            Update
+                        </a>
+
+                        <a href="{% url 'tracker:eater-delete' pk=eater.id %}"
+                           class="btn btn-outline-danger btn-sm">
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% include "includes/pagination.html" with object_name="eater" %}
+
+</div>
+
+{% else %}
+
+<p>There are no eaters.</p>
+
+{% endif %}
+
+{% endblock %}

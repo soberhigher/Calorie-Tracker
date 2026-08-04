@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+
+  <h1 class="mb-0">Meals</h1>
+
+    <div class="d-flex align-items-center">
+    {% include 'includes/search_form.html' with search_name="ration" search_value=request.GET.ration %}
+
+  <a class="btn btn-primary ms-3"
+         href="{% url 'tracker:meal-create' %}">+ Add meal</a>
+
+  </div>
+  </div>
+
+  <div class="card">
+
+      <div class="card-body">
+
+  {% if meal_list %}
+
+  <table class="table table-hover align-middle">
+
+    <tr>
+      <th>Date</th>
+      <th>Ration</th>
+      <th>Calories</th>
+      <th>Actions</th>
+    </tr>
+
+  {% for meal in meal_list %}
+
+    <tr>
+
+      <td>{{ meal.date|date:"d M, H:i" }}</td>
+
+      <td>{{ meal.get_ration_display }}</td>
+
+      <td>{{ meal.total_calories|floatformat:"0" }} kcal</td>
+
+      <td><a href="{% url 'tracker:meal-duplicate' pk=meal.id %}" class="text-decoration-none btn btn-outline-secondary btn-sm me-2">Duplicate</a>
+
+      <a href="{% url 'tracker:meal-detail' pk=meal.id %}" class="text-decoration-none btn btn-outline-success btn-sm me-2">Detail</a>
+
+      <a href="{% url 'tracker:meal-update' pk=meal.id %}" class="text-decoration-none btn btn-outline-primary btn-sm me-2">Update</a>
+
+      <a href="{% url 'tracker:meal-delete' pk=meal.id %}" class="text-decoration-none btn btn-outline-danger btn-sm">Delete</a></td>
+
+    </tr>
+    
+{% endfor %}
+
+  </table>
+
+    {% include "includes/pagination.html" with search_name="meal" %}
+
+
+  {% else %}
+  <p>There are no meals.</p>
+
+  {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}

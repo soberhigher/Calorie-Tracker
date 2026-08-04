@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h1>Meal Entry List</h1>
+    <h2><a class="float-end text-decoration-none btn btn-primary"
+           href="{% url 'tracker:meal-entry-form' %}">Create</a></h2>
+  </div>
+
+
+  {% if mealentry_list %}
+
+    <table class="table table-sm">
+
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Product</th>
+        <th>Ration</th>
+        <th>Actual Calories</th>
+        <th>Quantity</th>
+        <th>Weight</th>
+        <th>Eater</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+
+      {% for mealentry in mealentry_list %}
+
+        <tr>
+          <td>{{ mealentry.id }}</td>
+          <td>{{ mealentry.date }}</td>
+          <td>{{ mealentry.product }}</td>
+          <td>{{ mealentry.ration }}</td>
+          <td>{{ mealentry.actual_calories }}</td>
+          <td>{{ mealentry.quantity|default:"-" }}</td>
+          <td>{{ mealentry.weight|default:"-" }}</td>
+          <td>{{ mealentry.eater }}</td>
+          <td><a class="text-decoration-none"
+                 href="{% url 'tracker:meal-entry-update' pk=mealentry.id %}">Update</a></td>
+          <td><a class="text-decoration-none"
+                 href="{% url 'tracker:meal-entry-delete' pk=mealentry.id %}">Delete</a></td>
+        </tr>
+
+      {% endfor %}
+    </table>
+
+  {% else %}
+    <p>There are no eaters.</p>
+  {% endif %}
+
+
+{% endblock %}
