@@ -7,36 +7,36 @@ from django.views import generic
 from tracker.models import Eater, Product, MealEntry, Meal
 
 
-@login_required
-def index(request: HttpRequest) -> HttpResponse:
-    num_visits = request.session.get("num_visits", 0) + 1
-    request.session["num_visits"] = num_visits
-    total = request.user.today_summary()
-    goals = request.user.daily_macros()
-    calories_goal = request.user.daily_needs()
-    calories_percent = round((total["calories"] / calories_goal) * 100)
-    protein_percent = round((total["protein"] / goals["protein"]) * 100)
-    fat_percent = round((total["fat"] / goals["fat"]) * 100)
-    carb_percent = round((total["carb"] / goals["carb"]) * 100)
-    return render(request,
-                  "tracker/index.html",
-                  {"eater": request.user, "total": total, "num_visits": num_visits,
-                   "goals": goals, "calories_goals": calories_goal,
-                   "calories_percent": calories_percent, "protein_percent": protein_percent,
-                   "fat_percent": fat_percent, "carb_percent": carb_percent})
 
-@login_required
-def duplicate(request: HttpRequest, pk):
-    old_meal = Meal.objects.filter(eater=request.user).get(pk=pk)
-    entries = list(old_meal.infos.all())
-    old_meal.pk = None
-    old_meal.save()
+class IndexView(LoginRequiredMixin, generic.View):
+    def get(self, request):
+        total = request.user.today_summary()
+        goals = request.user.daily_macros()
+        calories_goal = request.user.daily_needs()
+        calories_percent = round((total["calories"] / calories_goal) * 100)
+        protein_percent = round((total["protein"] / goals["protein"]) * 100)
+        fat_percent = round((total["fat"] / goals["fat"]) * 100)
+        carb_percent = round((total["carb"] / goals["carb"]) * 100)
 
-    for entry in entries:
-        entry.pk = None
-        entry.meal = old_meal
-        entry.save()
-    return redirect("tracker:meal-list")
+        return render(request,
+                      "tracker/index.html",
+                      {"eater": request.user, "total": total,
+                       "goals": goals, "calories_goals": calories_goal,
+                       "calories_percent": calories_percent, "protein_percent": protein_percent,
+                       "fat_percent": fat_percent, "carb_percent": carb_percent})
+
+class DuplicateView(LoginRequiredMixin, generic.View):
+    def get(self, request, pk):
+        old_meal = Meal.objects.filter(eater=request.user).get(pk=pk)
+        entries = list(old_meal.infos.all())
+        old_meal.pk = None
+        old_meal.save()
+
+        for entry in entries:
+            entry.pk = None
+            entry.meal = old_meal
+            entry.save()
+        return redirect("tracker:meal-list")
 
 
 class EaterListView(LoginRequiredMixin, generic.ListView):

@@ -1,7 +1,5 @@
-from os import dup
-
+from django.views import View
 from tracker.views import (
-    index,
     ProductListView,
     EaterListView,
     MealEntryListView,
@@ -17,7 +15,11 @@ from tracker.views import (
     MealListView,
     MealCreateView,
     MealUpdateView,
-    MealDeleteView, MealDetailView, duplicate, ProductDetailView, EaterDetailView,
+    MealDeleteView,
+    MealDetailView,
+    duplicate,
+    ProductDetailView,
+    EaterDetailView, IndexView,
 )
 from django.urls import path
 
@@ -25,7 +27,7 @@ app_name = "tracker"
 urlpatterns = [
     path(
         "",
-        index,
+        IndexView.as_view(),
         name="index"),
     path(
         "eaters/",
@@ -108,4 +110,3 @@ urlpatterns = [
         MealEntryDeleteView.as_view(),
         name="meal-entry-delete")
 ]
-
