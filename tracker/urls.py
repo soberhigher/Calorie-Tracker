@@ -17,9 +17,9 @@ from tracker.views import (
     MealUpdateView,
     MealDeleteView,
     MealDetailView,
-    duplicate,
     ProductDetailView,
-    EaterDetailView, IndexView,
+    EaterDetailView,
+    IndexView, DuplicateView,
 )
 from django.urls import path
 
@@ -91,7 +91,7 @@ urlpatterns = [
         name="meal-detail"),
     path(
         "meals/<int:pk>/duplicate/",
-        duplicate,
+        DuplicateView.as_view(),
         name="meal-duplicate"),
     path(
         "meals-entry/",

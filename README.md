@@ -13,6 +13,7 @@ Python, Django, SQLite
 ## Setup
 ```bash
 python manage.py migrate
+python manage.py createsuperuser
 python manage.py loaddata tracker/fixtures/products_fixture.json
 python manage.py runserver
 ```
