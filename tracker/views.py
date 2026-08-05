@@ -40,7 +40,7 @@ class DuplicateView(LoginRequiredMixin, generic.View):
             entry.pk = None
             entry.meal = old_meal
             entry.save()
-        return redirect('tracker:meal-list')
+        return redirect("tracker:meal-list")
 
 
 class EaterListView(LoginRequiredMixin, generic.ListView):
@@ -58,18 +58,18 @@ class EaterListView(LoginRequiredMixin, generic.ListView):
 class EaterCreateView(LoginRequiredMixin, generic.CreateView):
     model = Eater
     fields = ["username", "age", "sex", "lifestyle", "weight", "height"]
-    success_url = reverse_lazy('racker:eater-list')
+    success_url = reverse_lazy("tracker:eater-list")
 
 
 class EaterUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Eater
     fields = ["age", "sex", "lifestyle", "weight", "height"]
-    success_url = reverse_lazy('tracker:eater-list')
+    success_url = reverse_lazy("tracker:eater-list")
 
 
 class EaterDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Eater
-    success_url = reverse_lazy('tracker:eater-list')
+    success_url = reverse_lazy("tracker:eater-list")
 
 
 class EaterDetailView(LoginRequiredMixin, generic.DetailView):
@@ -93,19 +93,19 @@ class ProductCreateView(LoginRequiredMixin, generic.CreateView):
     model = Product
     fields = ["name", "portion", "weight_piece",
               "calories", "protein", "fat", "carb"]
-    success_url = reverse_lazy('tracker:product-list')
+    success_url = reverse_lazy("tracker:product-list")
 
 
 class ProductUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Product
     fields = ["name", "portion", "weight_piece",
               "calories", "protein", "fat", "carb"]
-    success_url = reverse_lazy('tracker:product-list')
+    success_url = reverse_lazy("tracker:product-list")
 
 
 class ProductDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Product
-    success_url = reverse_lazy('tracker:product-list')
+    success_url = reverse_lazy("tracker:product-list")
 
 
 class ProductDetailView(LoginRequiredMixin, generic.DetailView):
@@ -114,7 +114,7 @@ class ProductDetailView(LoginRequiredMixin, generic.DetailView):
 
 class MealEntryListView(LoginRequiredMixin, generic.ListView):
     model = MealEntry
-    template_name = 'tracker/meal_entry_list.html'
+    template_name = "tracker/meal_entry_list.html"
 
     def get_queryset(self):
         return MealEntry.objects.filter(meal__eater=self.request.user)
@@ -123,7 +123,7 @@ class MealEntryListView(LoginRequiredMixin, generic.ListView):
 class MealEntryCreateView(LoginRequiredMixin, generic.CreateView):
     model = MealEntry
     fields = ["product", "weight", "quantity"]
-    template_name = 'tracker/mealentry_form.html'
+    template_name = "tracker/mealentry_form.html"
 
     def form_valid(self, form):
         form.instance.meal = Meal.objects.get(
@@ -132,14 +132,14 @@ class MealEntryCreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('tracker:meal-entry-form',
+        return reverse_lazy("tracker:meal-entry-form",
                             kwargs={"pk": self.kwargs["pk"]})
 
 
 class MealEntryUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = MealEntry
     fields = ["weight", "quantity"]
-    success_url = reverse_lazy('tracker:meal-entry-list')
+    success_url = reverse_lazy("tracker:meal-entry-list")
 
     def get_queryset(self):
         return MealEntry.objects.filter(meal__eater=self.request.user)
@@ -147,7 +147,7 @@ class MealEntryUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class MealEntryDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = MealEntry
-    success_url = reverse_lazy('tracker:meal-list')
+    success_url = reverse_lazy("tracker:meal-list")
 
     def get_queryset(self):
         return MealEntry.objects.filter(meal__eater=self.request.user)
@@ -176,14 +176,14 @@ class MealCreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('tracker:meal-entry-form',
+        return reverse_lazy("tracker:meal-entry-form",
                             kwargs={"pk": self.object.id})
 
 
 class MealUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Meal
     fields = ["ration"]
-    success_url = reverse_lazy('tracker:meal-list')
+    success_url = reverse_lazy("tracker:meal-list")
 
     def get_queryset(self):
         return Meal.objects.filter(eater=self.request.user)
@@ -191,7 +191,7 @@ class MealUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class MealDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Meal
-    success_url = reverse_lazy('tracker:meal-list')
+    success_url = reverse_lazy("tracker:meal-list")
 
     def get_queryset(self):
         return Meal.objects.filter(eater=self.request.user)
