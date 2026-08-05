@@ -1,4 +1,3 @@
-from django.views import View
 from tracker.views import (
     ProductListView,
     EaterListView,
@@ -19,7 +18,8 @@ from tracker.views import (
     MealDetailView,
     ProductDetailView,
     EaterDetailView,
-    IndexView, DuplicateView,
+    IndexView,
+    DuplicateView,
 )
 from django.urls import path
 

@@ -28,12 +28,14 @@ class AdminPanelTest(TestCase):
         )
 
     def test_eater_change_page(self):
-        url = reverse("admin:tracker_eater_change", args=[self.eater.id])
+        url = reverse("admin:tracker_eater_change",
+                      args=[self.eater.id])
         res = self.client.get(url)
         self.assertEqual(res.status_code, 200)
 
     def test_meal_entry_change_page(self):
-        url = reverse("admin:tracker_mealentry_change", args=[self.meal_entry.id])
+        url = reverse("admin:tracker_mealentry_change",
+                      args=[self.meal_entry.id])
         res = self.client.get(url)
         self.assertEqual(res.status_code, 200)
 
@@ -80,14 +82,6 @@ class ProductListViewTest(TestCase):
         self.client.force_login(self.user)
 
     def test_product_search_and_pagination(self):
-        product = Product.objects.create(
-            name="Egg", portion="PC", weight_piece=50,
-            calories=144, protein=13, fat=10, carb=0
-        )
-        anotherproduct = Product.objects.create(
-            name="Apple", portion="PC", weight_piece=50,
-            calories=144, protein=13, fat=10, carb=0
-        )
         url = reverse("tracker:product-list")
         res = self.client.get(url, {"name": "Egg"})
         self.assertContains(res, "Egg")
