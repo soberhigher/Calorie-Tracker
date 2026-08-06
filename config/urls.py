@@ -1,5 +1,5 @@
-from debug_toolbar.toolbar import debug_toolbar_urls
 from django.contrib import admin
+from django.conf import settings
 from django.urls import (path,
                          include)
 
@@ -14,4 +14,8 @@ urlpatterns = [
     path(
         "accounts/",
         include("django.contrib.auth.urls"))
-] + debug_toolbar_urls()
+]
+
+if settings.DEBUG:
+    from debug_toolbar.toolbar import debug_toolbar_urls
+    urlpatterns += debug_toolbar_urls()
