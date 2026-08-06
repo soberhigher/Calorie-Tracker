@@ -18,3 +18,4 @@ pyflakes==3.4.0
 pyparsing==3.3.2
 sqlparse==0.5.5
 tzdata==2026.3
+whitenoise==6.12.0
