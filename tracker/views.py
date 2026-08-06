@@ -6,7 +6,8 @@ from django.views import generic
 from tracker.models import (Eater,
                             Product,
                             MealEntry,
-                            Meal)
+                            Meal,
+                            Ration)
 
 
 class IndexView(LoginRequiredMixin, generic.View):
@@ -163,7 +164,11 @@ class MealListView(LoginRequiredMixin, generic.ListView):
         query = self.request.GET.get("ration")
 
         if query:
-            queryset = queryset.filter(ration__icontains=query)
+            matching_codes = [
+                code for code, label in Ration.choices
+                if query.lower() in label.lower()
+            ]
+            queryset = queryset.filter(ration__in=matching_codes)
         return queryset
 
 
