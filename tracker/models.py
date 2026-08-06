@@ -7,15 +7,16 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
-
 class Sex(models.TextChoices):
     male = "M", "Male"
     female = "F", "Female"
+
 
 class Lifestyle(models.TextChoices):
     sedentary = "S", "Sedentary"
     light = "L", "Light"
     average = "A", "Average"
+
 
 class Eater(AbstractUser):
     MIN_AGE = 1
@@ -26,10 +27,17 @@ class Eater(AbstractUser):
     MAX_HEIGHT = 250
 
     sex = models.CharField(choices=Sex.choices, default="M", max_length=6)
-    age = models.IntegerField(default=23, validators=[MinValueValidator(MIN_AGE), MaxValueValidator(MAX_AGE)])
-    weight = models.FloatField(default=73, validators=[MinValueValidator(MIN_WEIGHT), MaxValueValidator(MAX_WEIGHT)])
-    height = models.FloatField(default=193, validators=[MinValueValidator(MIN_HEIGHT), MaxValueValidator(MAX_HEIGHT)])
-    lifestyle = models.CharField(default="L", choices=Lifestyle.choices, max_length=10)
+    age = models.IntegerField(default=23,
+                              validators=[MinValueValidator(MIN_AGE),
+                                          MaxValueValidator(MAX_AGE)])
+    weight = models.FloatField(default=73,
+                               validators=[MinValueValidator(MIN_WEIGHT),
+                                           MaxValueValidator(MAX_WEIGHT)])
+    height = models.FloatField(default=193,
+                               validators=[MinValueValidator(MIN_HEIGHT),
+                                           MaxValueValidator(MAX_HEIGHT)])
+    lifestyle = models.CharField(default="L", choices=Lifestyle.choices,
+                                 max_length=10)
 
     def __str__(self):
         return self.username
@@ -44,7 +52,7 @@ class Eater(AbstractUser):
         if self.lifestyle == "S":
             total = bmr * 1.2
         elif self.lifestyle == "L":
-            total =  bmr * 1.375
+            total = bmr * 1.375
         elif self.lifestyle == "A":
             total = bmr * 1.55
         return round(total)
@@ -53,9 +61,8 @@ class Eater(AbstractUser):
         total = self.daily_needs()
 
         return dict(protein=round(total * 0.30 / 4),
-                          fat=round(total * 0.25 / 9),
-                          carb=round(total * 0.45 / 4))
-
+                    fat=round(total * 0.25 / 9),
+                    carb=round(total * 0.45 / 4))
 
     def daily_summary(self, date):
 
@@ -69,8 +76,6 @@ class Eater(AbstractUser):
 
     def today_summary(self):
         return self.daily_summary(datetime.date.today())
-
-
 
 
 class TypePortion(models.TextChoices):
@@ -129,27 +134,22 @@ class Meal(models.Model):
         related_name="meals"
     )
 
-
     def total_calories(self):
         return sum(entry.actual_calories() for entry in self.infos.all())
-
 
     def total_protein(self):
         return sum(entry.actual_protein() for entry in self.infos.all())
 
-
     def total_fat(self):
         return sum(entry.actual_fat() for entry in self.infos.all())
-
 
     def total_carbs(self):
         return sum(entry.actual_carb() for entry in self.infos.all())
 
-
     def __str__(self):
         return (f"{self.get_ration_display()} - "
-               f"{self.date.strftime("%d.%m.%y %H:%M")} - "
-               f"{self.total_calories()} calories")
+                f"{self.date.strftime('%d.%m.%y %H:%M')} - "
+                f"{self.total_calories()} calories")
 
 
 class MealEntry(models.Model):
@@ -179,9 +179,8 @@ class MealEntry(models.Model):
                 "weight": "Weight is required for weight products."
             })
 
-
     def __str__(self):
-            return f"{self.product} - {self.quantity or self.weight}"
+        return f"{self.product} - {self.quantity or self.weight}"
 
     def get_weight_for_calc(self):
         if self.product.portion == "PC":
@@ -190,8 +189,6 @@ class MealEntry(models.Model):
             return self.quantity * self.product.weight_piece
 
         return self.weight or 0
-
-
 
     def actual_calories(self):
         c = self.get_weight_for_calc()
@@ -208,9 +205,3 @@ class MealEntry(models.Model):
     def actual_carb(self):
         c = self.get_weight_for_calc()
         return self.product.carb / 100 * c
-
-
-
-
-
-

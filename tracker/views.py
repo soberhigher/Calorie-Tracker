@@ -1,42 +1,46 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render, redirect
+from django.shortcuts import (render,
+                              redirect)
 from django.urls import reverse_lazy
 from django.views import generic
-from tracker.models import Eater, Product, MealEntry, Meal
+from tracker.models import (Eater,
+                            Product,
+                            MealEntry,
+                            Meal)
 
 
-@login_required
-def index(request: HttpRequest) -> HttpResponse:
-    num_visits = request.session.get("num_visits", 0) + 1
-    request.session["num_visits"] = num_visits
-    total = request.user.today_summary()
-    goals = request.user.daily_macros()
-    calories_goal = request.user.daily_needs()
-    calories_percent = round((total["calories"] / calories_goal) * 100)
-    protein_percent = round((total["protein"] / goals["protein"]) * 100)
-    fat_percent = round((total["fat"] / goals["fat"]) * 100)
-    carb_percent = round((total["carb"] / goals["carb"]) * 100)
-    return render(request,
-                  "tracker/index.html",
-                  {"eater": request.user, "total": total, "num_visits": num_visits,
-                   "goals": goals, "calories_goals": calories_goal,
-                   "calories_percent": calories_percent, "protein_percent": protein_percent,
-                   "fat_percent": fat_percent, "carb_percent": carb_percent})
+class IndexView(LoginRequiredMixin, generic.View):
+    def get(self, request):
+        total = request.user.today_summary()
+        goals = request.user.daily_macros()
+        calories_goal = request.user.daily_needs()
+        calories_percent = round((total["calories"] / calories_goal) * 100)
+        protein_percent = round((total["protein"] / goals["protein"]) * 100)
+        fat_percent = round((total["fat"] / goals["fat"]) * 100)
+        carb_percent = round((total["carb"] / goals["carb"]) * 100)
 
-@login_required
-def duplicate(request: HttpRequest, pk):
-    old_meal = Meal.objects.filter(eater=request.user).get(pk=pk)
-    entries = list(old_meal.infos.all())
-    old_meal.pk = None
-    old_meal.save()
+        return render(request,
+                      "tracker/index.html",
+                      {"eater": request.user, "total": total,
+                       "goals": goals, "calories_goals": calories_goal,
+                       "calories_percent": calories_percent,
+                       "protein_percent": protein_percent,
+                       "fat_percent": fat_percent,
+                       "carb_percent": carb_percent})
 
-    for entry in entries:
-        entry.pk = None
-        entry.meal = old_meal
-        entry.save()
-    return redirect("tracker:meal-list")
+
+class DuplicateView(LoginRequiredMixin, generic.View):
+    def get(self, request, pk):
+        old_meal = Meal.objects.filter(eater=request.user).get(pk=pk)
+        entries = list(old_meal.infos.all())
+        old_meal.pk = None
+        old_meal.save()
+
+        for entry in entries:
+            entry.pk = None
+            entry.meal = old_meal
+            entry.save()
+        return redirect("tracker:meal-list")
 
 
 class EaterListView(LoginRequiredMixin, generic.ListView):
@@ -99,7 +103,6 @@ class ProductUpdateView(LoginRequiredMixin, generic.UpdateView):
     success_url = reverse_lazy("tracker:product-list")
 
 
-
 class ProductDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Product
     success_url = reverse_lazy("tracker:product-list")
@@ -129,7 +132,8 @@ class MealEntryCreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy("tracker:meal-entry-form", kwargs={"pk": self.kwargs["pk"]})
+        return reverse_lazy("tracker:meal-entry-form",
+                            kwargs={"pk": self.kwargs["pk"]})
 
 
 class MealEntryUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -172,7 +176,8 @@ class MealCreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy("tracker:meal-entry-form", kwargs={"pk": self.object.id})
+        return reverse_lazy("tracker:meal-entry-form",
+                            kwargs={"pk": self.object.id})
 
 
 class MealUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -190,6 +195,7 @@ class MealDeleteView(LoginRequiredMixin, generic.DeleteView):
 
     def get_queryset(self):
         return Meal.objects.filter(eater=self.request.user)
+
 
 class MealDetailView(LoginRequiredMixin, generic.DetailView):
     model = Meal
